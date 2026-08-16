@@ -1,14 +1,14 @@
 {
   "_comment": "Single source of truth for every link to the game. Fill these in and everything else updates: the landing page buttons, the video end-card CTA, and the caption text. Leave a value empty and that button renders as 'Coming soon' instead of a dead link.",
 
-  "ios": "",
+  "ios": "https://apps.apple.com/us/app/color-plunge/id6779999039",
   "android": "",
 
   "_ios_example": "https://apps.apple.com/us/app/color-plunge/id0000000000",
   "_android_example": "https://play.google.com/store/apps/details?id=com.jacobmarx.colorplunge",
 
   "website": "https://jacobmarx19-code.github.io/color-plunge/",
-  "tagline": "One tap. Match the colour. Don't blink.",
+  "tagline": "Match the color. Smash through. Don't stop.",
 
   "notifyEmail": "jacobmarx19@gmail.com"
 }
