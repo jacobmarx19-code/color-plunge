@@ -72,8 +72,16 @@
   <h1>Color Plunge!</h1>
   <p class="tag" id="tag">One tap. Match the colour. Don't blink.</p>
 
+  <!--
+    The pre-launch state is rendered STATICALLY here, not by script. TikTok's
+    app reviewer and URL-verification crawler don't necessarily run JS, and a
+    page that says "Loading…" to them is worse than no page at all. Script only
+    *upgrades* this markup once links.json has real store URLs.
+  -->
   <div class="links" id="links">
-    <span class="btn soon">Loading…</span>
+    <span class="btn soon">Get it on iOS — coming soon</span>
+    <span class="btn soon">Get it on Android — coming soon</span>
+    <a class="btn" href="mailto:jacobmarx19@gmail.com?subject=Notify%20me%20about%20Color%20Plunge">Notify me</a>
   </div>
 
   <footer>
@@ -89,30 +97,26 @@
 // matters here, because App Store review and TikTok's app review both look at
 // this page, and a broken link reads worse than an honest placeholder.
 (async () => {
-  const el = document.getElementById('links');
   let cfg = {};
   try {
     cfg = await (await fetch('links.json', { cache: 'no-cache' })).json();
   } catch {
-    // Opened via file:// or JSON is malformed — fail quiet, not broken.
+    // Opened via file://, offline, or malformed JSON — the static markup above
+    // is already correct for the pre-launch state, so just leave it alone.
+    return;
   }
 
   if (cfg.tagline) document.getElementById('tag').textContent = cfg.tagline;
+
+  // Only touch the DOM once there's something better to show than the default.
+  if (!cfg.ios && !cfg.android) return;
 
   const store = (url, label) => url
     ? `<a class="btn primary" href="${url}" rel="noopener">${label}</a>`
     : `<span class="btn soon">${label} — coming soon</span>`;
 
-  const parts = [store(cfg.ios, 'Get it on iOS'), store(cfg.android, 'Get it on Android')];
-
-  // Nothing shipped yet? Give people a way to hear about it.
-  if (!cfg.ios && !cfg.android && cfg.notifyEmail) {
-    parts.push(
-      `<a class="btn" href="mailto:${cfg.notifyEmail}?subject=Notify%20me%20about%20Color%20Plunge">Notify me</a>`
-    );
-  }
-
-  el.innerHTML = parts.join('');
+  document.getElementById('links').innerHTML =
+    store(cfg.ios, 'Get it on iOS') + store(cfg.android, 'Get it on Android');
 })();
 </script>
 </body>
